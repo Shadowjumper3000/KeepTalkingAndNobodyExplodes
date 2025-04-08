@@ -1,65 +1,66 @@
-#Simple Wires
-
-import os
+"""Simple Wires Module Solver for Keep Talking and Nobody Explodes."""
+from utils import get_yes_no_input, get_int_input, run_module
 
 def main():
-    numberWires = int(input("Number of wires: "))
-    if numberWires == 3:
+    """Simple Wires main solver function."""
+    number_wires = get_int_input("Number of wires (3-6): ", min_val=3, max_val=6)
+    
+    if number_wires == 3:
         wires_3()
-    elif numberWires == 4:
+    elif number_wires == 4:
         wires_4()
-    elif numberWires == 5:
+    elif number_wires == 5:
         wires_5()
-    elif numberWires == 6:
+    elif number_wires == 6:
         wires_6()
 
 def wires_3():
-    if str(input("Are there red wires? (Y/N): ")).strip().upper() == "N":
+    """Logic for 3 wire cases."""
+    if not get_yes_no_input("Are there red wires?"):
         print("Cut the second wire")
-    elif str(input("Is the last wire white? (Y/N): ")).strip().upper() == "Y":
+    elif get_yes_no_input("Is the last wire white?"):
         print("Cut the last wire")
-    elif int(input("Number of blue wires: ")) > 1:
+    elif get_int_input("Number of blue wires: ", min_val=0) > 1:
         print("Cut the last blue wire")
     else:
         print("Cut the last wire")
 
 def wires_4():
-    redWires = int(input("Number of red wires:"))
-    if redWires > 1 and int(input("Last digit of serial number:")) % 2 == 1:
+    """Logic for 4 wire cases."""
+    red_wires = get_int_input("Number of red wires:", min_val=0)
+    if red_wires > 1 and get_int_input("Last digit of serial number:", min_val=0, max_val=9) % 2 == 1:
         print("Cut the last red wire")
-    elif redWires == 0 and str(input("Is the last wire yellow? (Y/N): ")).strip().upper() == "Y":
+    elif red_wires == 0 and get_yes_no_input("Is the last wire yellow?"):
         print("Cut the first wire")
-    elif int(input("Number of blue wires: ")) == 1:
+    elif get_int_input("Number of blue wires: ", min_val=0) == 1:
         print("Cut the first wire")
-    elif int(input("Number of yellow wires: ")) > 1:
+    elif get_int_input("Number of yellow wires: ", min_val=0) > 1:
         print("Cut the last wire")
     else:
         print("Cut the second wire")
 
 def wires_5():
-    if str(input("Is the last wire black? (Y/N): ")).strip().upper() == "Y" and int(input("Last digit of serial Number: ")) % 2 == 1:
+    """Logic for 5 wire cases."""
+    if get_yes_no_input("Is the last wire black?") and get_int_input("Last digit of serial Number: ", min_val=0, max_val=9) % 2 == 1:
         print("Cut the fourth wire")
-    elif int(input("Number of red wires: ")) == 1 and int(input("Number of yellow wires:")) > 1:
+    elif get_int_input("Number of red wires: ", min_val=0) == 1 and get_int_input("Number of yellow wires:", min_val=0) > 1:
         print("Cut the second wire")
-    elif str(input("Are there black wires? (Y/N): ")).strip().upper() == "N":
+    elif not get_yes_no_input("Are there black wires?"):
         print("Cut the second wire")
     else:
         print("Cut the first wire")
 
 def wires_6():
-    yellowWires = int(input("How many yellow wires are there:"))
-    if yellowWires == 0 and int(input("Last digit of serial number: ")) % 2 == 1:
+    """Logic for 6 wire cases."""
+    yellow_wires = get_int_input("How many yellow wires are there:", min_val=0)
+    if yellow_wires == 0 and get_int_input("Last digit of serial number: ", min_val=0, max_val=9) % 2 == 1:
         print("Cut the third wire")
-    elif yellowWires == 1 and int(input("Number of white wires: ")) > 1:
+    elif yellow_wires == 1 and get_int_input("Number of white wires: ", min_val=0) > 1:
         print("Cut the fourth wire")
-    elif int(input("Number of red wires: ")) == 0:
+    elif get_int_input("Number of red wires: ", min_val=0) == 0:
         print("Cut the last wire")
     else:
         print("Cut the fourth wire")
 
-while True:
-    main()
-    print("----------------------------------")
-    if input("Repeat the program? (Y/N): ").strip().upper() != 'Y':
-        break
-    os.system('cls' if os.name == 'nt' else 'clear')
+if __name__ == "__main__":
+    run_module(main)
