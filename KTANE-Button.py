@@ -1,5 +1,5 @@
 """Button Module Solver for Keep Talking and Nobody Explodes."""
-from ktane_utils import get_yes_no_input, get_int_input, run_module
+from utils import get_yes_no_input, get_int_input, run_module
 
 def main():
     """Take button inputs and determine further action."""

@@ -2,8 +2,9 @@
 Main launcher for Keep Talking and Nobody Explodes module solvers.
 """
 import os
-import importlib
+import importlib.util
 import glob
+import sys
 from utils import clear_screen, get_int_input
 
 def get_available_modules():
@@ -12,12 +13,14 @@ def get_available_modules():
     modules = []
     
     for file in module_files:
-        # Remove .py extension and strip 'KTANE-' prefix
-        module_name = file[6:-3]
+        # Remove .py extension and keep the full filename for import
+        module_name = file[6:-3]  # Just for display
+        import_name = file[:-3]  # Keep KTANE- prefix for proper importing
+        
         modules.append({
             "name": module_name,
             "file": file,
-            "import_name": file[:-3].replace("-", "_")
+            "import_name": import_name
         })
     
     return modules
@@ -52,14 +55,21 @@ def main():
         selected_module = modules[choice - 1]
         
         try:
-            # Import the selected module and run its main function
-            module = importlib.import_module(selected_module["import_name"])
+            # Load the module directly from the file path
+            module_path = os.path.abspath(selected_module["file"])
+            module_name = selected_module["import_name"]
+            
+            # Use importlib.util for more direct module loading
+            spec = importlib.util.spec_from_file_location(module_name, module_path)
+            module = importlib.util.module_from_spec(spec)
+            sys.modules[module_name] = module
+            spec.loader.exec_module(module)
             
             clear_screen()
             print(f"Running {selected_module['name']} Module Solver...\n")
             
-            # If the module has been updated to use run_module(), it won't need to be called
-            if hasattr(module, "main") and not hasattr(module, "__main_executed"):
+            # Run the main function
+            if hasattr(module, "main"):
                 module.main()
             
             input("\nPress Enter to return to the main menu...")
